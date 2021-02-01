@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({})
+    Usuario.find({estado: false}, '')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -24,10 +24,15 @@ router.get('/', (req, res) => {
                 })
             }
 
-            res.json({
-                ok: true,
-                usuarios
-            });
+            Usuario.countDocuments({estado: false}, (err, conteo) => {
+                res.json({
+                    ok: true,
+                    usuarios,
+                    cuantos: conteo
+                });
+            })
+
+            
         })
 
 })
@@ -86,8 +91,40 @@ router.put('/:id', (req, res) => {
     
 })
 
-router.delete('/users', (req, res) => {
-    res.json('Hola!');
+router.delete('/:id', (req, res) => {
+    
+
+    const { id } = req.params;
+
+    let cambioEstado = {
+        estado: false
+    }
+
+    Usuario.findByIdAndUpdate(id, cambioEstado ,{ new: true }, (err, usuarioBorrado) => {
+
+        if(err){
+            return res.status(400).json({
+                ok: false,
+                err
+            })
+        }
+
+        if(!usuarioBorrado){
+            return res.status(400).json({
+                ok: false,
+                error:{
+                    message: 'Usuario no encontrado'
+                }
+            })
+        }
+
+        res.json({
+            ok: true,
+            usuario: usuarioBorrado
+        })
+    })
+
+
 })
 
 module.exports = router;
