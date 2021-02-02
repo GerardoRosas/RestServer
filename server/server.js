@@ -15,6 +15,7 @@ conectarDB();
 
 //Definimos las rutas
 app.use('/usuario', require('./routes/usuario'));
+app.use('/login', require('./routes/login'));
 
 
 app.listen(process.env.PORT, () => {
