@@ -8,7 +8,7 @@ const { verificarToken , verificaAdmin_Role } = require('../middlewares/auth');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
-router.get('/', verificarToken ,(req, res) => {
+router.get('/', verificarToken , (req, res) => {
     
     let desde = req.query.desde || 0;
     desde = Number(desde);
