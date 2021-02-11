@@ -70,7 +70,7 @@ async function verify( token ) {
 router.post('/google', (req, res) => {
 
     let { idtoken } = req.body;
-
+    
     verify(idtoken)
 
     res.json({
