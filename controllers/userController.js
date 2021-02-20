@@ -1,4 +1,5 @@
-const { response } = require('express')
+const { response } = require('express');
+const Usuario = require('../models/usuario');
 
 module.exports.usuariosGet = (req, res = response) => {
 
@@ -16,12 +17,13 @@ module.exports.usuariosGet = (req, res = response) => {
 
 module.exports.usuariosPost = (req, res = response) => {
 
-    const { nombre, edad } = req.body;
+    const { nombre, correo } = req.body;
+
+    const usuario = new Usuario(req.body);
 
     res.json({
         msg: 'Post',
-        nombre, 
-        edad
+        usuario
     })
 }
 
