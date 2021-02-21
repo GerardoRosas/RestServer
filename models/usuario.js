@@ -13,7 +13,7 @@ const UsuarioSchema = Schema({
     },
     password:{
         type: String,
-        required: [true, 'La contraseña es olbligatoria']
+        required: [true, 'La contraseña es obligatoria']
     },
     img:{
         type: String
