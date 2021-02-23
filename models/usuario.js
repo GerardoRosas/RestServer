@@ -33,5 +33,13 @@ const UsuarioSchema = Schema({
     }
 });
 
+//Quitamos campos antes de mandar la respuesta
+UsuarioSchema.methods.toJSON = function(){
+    const { __v, password, ...user } = this.toObject();
+
+    return user;
+
+}
+
 
 module.exports = model('Usuario', UsuarioSchema);
