@@ -2,17 +2,21 @@ const { response } = require('express');
 const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario');
 
-module.exports.usuariosGet = (req, res = response) => {
+module.exports.usuariosGet = async (req, res = response) => {
 
-    const { q, estatus, nombre = "No name", page = 1, limit } = req.query;
+    const { desde = 0, limite = 5 } = req.query;
+    const query = { estado : true }
+   
+    const [ total, usuarios ] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query)
+            .skip(Number(desde - 1))
+            .limit(Number(limite))
+    ])  
 
-    res.send({
-        msg: 'GET',
-        q, 
-        estatus,
-        nombre,
-        page,
-        limit
+    res.json({
+        total,
+        usuarios
     })
 }
 
@@ -30,9 +34,7 @@ module.exports.usuariosPost = async (req, res = response) => {
     //Guardar enBD
     await usuario.save();
 
-    res.json({
-        usuario
-    })
+    res.json(usuario);
 }
 
 module.exports.usuariosPut = async (req, res = response) => {
@@ -62,10 +64,19 @@ module.exports.usuariosPatch = (req, res = response) => {
     })
 }
 
-module.exports.usuariosDelete = (req, res = response) => {
+module.exports.usuariosDelete = async (req, res = response) => {
 
-    res.send({
-        msg: 'Delete'
+    const { id } = req.params;
+
+    //Fiscamente se borra
+    //const usuario = await Usuario.findByIdAndDelete(id);
+
+    //Canbiamos el estado
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado:false});
+
+    res.json({
+        message: 'Usuario borrado correctamente',
+        usuario
     })
 }
 

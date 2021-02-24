@@ -22,7 +22,10 @@ router.put('/:id', [
     body('role').custom( esRoleValido ),
 ], validate, userController.usuariosPut);
 
-router.delete('/', userController.usuariosDelete);
+router.delete('/:id', [
+    check('id', 'No es un id válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+], validate, userController.usuariosDelete);
 
 router.patch('/', userController.usuariosPatch);
 
