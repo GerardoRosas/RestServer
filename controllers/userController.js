@@ -68,6 +68,8 @@ module.exports.usuariosDelete = async (req, res = response) => {
 
     const { id } = req.params;
 
+    console.log(req.uid);
+
     //Fiscamente se borra
     //const usuario = await Usuario.findByIdAndDelete(id);
 
