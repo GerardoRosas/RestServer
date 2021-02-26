@@ -68,17 +68,15 @@ module.exports.usuariosDelete = async (req, res = response) => {
 
     const { id } = req.params;
 
-    console.log(req.uid);
-
-    //Fiscamente se borra
-    //const usuario = await Usuario.findByIdAndDelete(id);
-
-    //Canbiamos el estado
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado:false});
+    //Cambiamos el estado
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado:false}, {new:true});
+    const usuarioAutenticado = req.usuario;
 
     res.json({
         message: 'Usuario borrado correctamente',
-        usuario
+        usuarioBorrado: usuario,
+        usuarioAutenticado
+        
     })
 }
 
