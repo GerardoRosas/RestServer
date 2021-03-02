@@ -31,10 +31,12 @@ class Server {
         //Routes config
         const userRoutes = require('../routes/user');
         const authRoutes = require('../routes/auth');
+        const categoriasRoutes = require('../routes/categorias');
 
 
         this.app.use('/api/usuarios', userRoutes);
         this.app.use('/api/auth', authRoutes);
+        this.app.use('/api/categorias', categoriasRoutes);
     }
 
     middlewares(){
