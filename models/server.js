@@ -32,11 +32,13 @@ class Server {
         const userRoutes = require('../routes/user');
         const authRoutes = require('../routes/auth');
         const categoriasRoutes = require('../routes/categorias');
+        const productosRoutes = require('../routes/productos');
 
 
         this.app.use('/api/usuarios', userRoutes);
         this.app.use('/api/auth', authRoutes);
         this.app.use('/api/categorias', categoriasRoutes);
+        this.app.use('/api/productos', productosRoutes);
     }
 
     middlewares(){

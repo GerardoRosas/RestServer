@@ -3,44 +3,45 @@ const { check, body } = require('express-validator');
 
 const { validate } = require('../middlewares/validation');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { existeCategoria } = require('../helpers/db-validators');
+const { existeProductoPorId, existeCategoria } = require('../helpers/db-validators');
 const { esAdminRole } = require('../middlewares/validar-roles');
 
-//Controllers 
-const categoriaController = require('../controllers/categoriasController');
+const productoController = require('../controllers/productoController');
 
 //Obtener todas las categorias -- Publico
-router.get('/', categoriaController.obtenerCategorias);
+router.get('/', productoController.obtenerProductos);
 
 //Obtener una categoria por id 
 router.get('/:id', [
     check('id', 'No es un id válido de mongo').isMongoId(),
-    check('id').custom( existeCategoria ),
+    check('id').custom( existeProductoPorId ),
     validate,
-], categoriaController.obtenerCategoria)
+], productoController.obtenerProducto)
 
 //Crear categoria - privado 
 router.post('/', [ 
     validarJWT,
-    body('nombre', 'El nombre es obligatorio').notEmpty(),
-
-], categoriaController.crearCategoria)
+    check('nombre', 'El nombre es obligatorio').notEmpty(),
+    check('categoria', 'No es un id de mongo').isMongoId(),
+    check('categoria').custom( existeCategoria ),
+    validate
+], productoController.crearProducto)
 
 //Actualizar un registro por id
 router.put('/:id', [
     validarJWT,
-    check('nombre', 'El nombre es obligatorio').notEmpty(),
     check('id', 'No es un id válido de mongo').isMongoId(),
-    check('id').custom( existeCategoria ),
-], validate, categoriaController.actualizarCategoria)
+    check('id').custom( existeProductoPorId ),
+], validate, productoController.actualizarProducto)
 
 //Borrar categoria -- usuario ADmin
 router.delete('/:id', [
     validarJWT,
     esAdminRole,
     check('id', 'No es un id válido de mongo').isMongoId(),
-    check('id').custom( existeCategoria ),
-], validate, categoriaController.borrarCategoria)
+    check('id').custom( existeProductoPorId ),
+], validate, productoController.borrarProducto)
+
 
 
 
