@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 
 const dbConnection = require('../database/config');
 
@@ -34,6 +35,7 @@ class Server {
         const categoriasRoutes = require('../routes/categorias');
         const productosRoutes = require('../routes/productos');
         const buscarRoutes = require('../routes/buscar');
+        const uploadsRoutes = require('../routes/uploads');
 
 
         this.app.use('/api/usuarios', userRoutes);
@@ -41,6 +43,7 @@ class Server {
         this.app.use('/api/categorias', categoriasRoutes);
         this.app.use('/api/productos', productosRoutes);
         this.app.use('/api/buscar', buscarRoutes);
+        this.app.use('/api/uploads', uploadsRoutes);
     }
 
     middlewares(){
@@ -48,6 +51,11 @@ class Server {
         this.app.use( express.static('public'));
         this.app.use( bodyParser.json() );
         this.app.use(bodyParser.urlencoded({ extended: false }));
+
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        }));
     }
 
     listen(){
