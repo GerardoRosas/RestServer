@@ -10,9 +10,25 @@ module.exports.cargarArchivo = async (req, res) => {
         return;
     }
 
-    const nombre = await subirArchivo(req.files);
+    try {
+        const nombre = await subirArchivo(req.files, ['txt', 'md', 'jpg'], 'imagenes');
+        
+        res.json({
+            nombre
+        })
+    } catch (error) {
+        res.json({
+            error
+        }).status(400)
+    }
+
+}
+
+module.exports.actualizarImagen = (req, res) => {
+
+    const { id, coleccion } = req.params;
 
     res.json({
-        nombre
+        id, coleccion
     })
 }
